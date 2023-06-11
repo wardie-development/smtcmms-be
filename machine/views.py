@@ -53,19 +53,19 @@ class MachineViewSet(ModelViewSet):
         queryset = self.queryset
 
         if user.is_superuser:
-            return queryset
+            return queryset.all()
 
         return queryset.filter(customer=user.customer)
 
 
-class ManufacturerViewSet(GenericViewSet, mixins.ListModelMixin):
+class ManufacturerViewSet(GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     queryset = Manufacturer.objects.filter(is_active=True).order_by("-created_at")
     permission_classes = [IsAuthenticated]
     authentication_classes = [BearerTokenAuthentication]
     serializer_class = ManufacturerSerializer
 
 
-class MachineTypeViewSet(GenericViewSet, mixins.ListModelMixin):
+class MachineTypeViewSet(GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     queryset = MachineType.objects.filter(is_active=True).order_by("-created_at")
     permission_classes = [IsAuthenticated]
     authentication_classes = [BearerTokenAuthentication]
