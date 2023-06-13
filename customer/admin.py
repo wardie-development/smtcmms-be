@@ -1,6 +1,26 @@
 from django.contrib import admin
 
-from .models import Customer
+from .models import Customer, State
+
+
+@admin.register(State)
+class StateAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    list_filter = ("name",)
+    search_fields = ("name",)
+    ordering = ("id",)
+    readonly_fields = ("id",)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "id",
+                    "name",
+                )
+            },
+        ),
+    )
 
 
 @admin.register(Customer)
