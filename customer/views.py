@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from utils.auth import BearerTokenAuthentication
 from .models import Customer, State
 from .permissions import CustomerPermissions
-from .serializers import CustomerSerializer
+from .serializers import CustomerSerializer, ListCustomerSerializer
 
 
 class CustomerViewSet(ModelViewSet):
@@ -15,6 +15,11 @@ class CustomerViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, CustomerPermissions]
     authentication_classes = [BearerTokenAuthentication]
     serializer_class = CustomerSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action in ("list", "retrieve"):
+            return ListCustomerSerializer(*args, **kwargs)
+        return super().get_serializer(*args, **kwargs)
 
     @action(detail=False, methods=["GET"])
     def states(self, request, *args, **kwargs):
