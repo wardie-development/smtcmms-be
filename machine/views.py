@@ -5,9 +5,10 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import mixins, status
 
 from utils.auth import BearerTokenAuthentication
-from .models import Machine, Manufacturer, MachineType
+from .models import Machine, Manufacturer, MachineType, Report
 from .serializers import MachineSerializer, ManufacturerSerializer, \
-    MachineTypeSerializer, CreateMachineSerializer
+    MachineTypeSerializer, CreateMachineSerializer, ReportSerializer, \
+    ListReportSerializer
 
 
 class MachineViewSet(ModelViewSet):
@@ -70,3 +71,30 @@ class MachineTypeViewSet(GenericViewSet, mixins.ListModelMixin, mixins.CreateMod
     permission_classes = [IsAuthenticated]
     authentication_classes = [BearerTokenAuthentication]
     serializer_class = MachineTypeSerializer
+
+
+class ReportViewSet(ModelViewSet):
+    queryset = Report.objects.filter(is_active=True).order_by("-created_at", "is_verified")
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [BearerTokenAuthentication]
+    serializer_class = ReportSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = ListReportSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = ListReportSerializer(instance)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        request = self.request
+        user = request.user
+        queryset = self.queryset
+
+        if user.is_superuser:
+            return queryset.all()
+
+        return queryset.filter(machine__customer=user.customer)
