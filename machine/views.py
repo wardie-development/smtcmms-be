@@ -96,7 +96,7 @@ class ReportViewSet(ModelViewSet):
         if not machine_id:
             raise ValidationError({"error": "Machine ID is required"})
         queryset = self.filter_queryset(self.get_queryset())
-        queryset = queryset.filter(machine_id=machine_id)
+        queryset = queryset.filter(machine_id=machine_id).order_by("created_at")
         serializer = ListReportSerializer(queryset, many=True)
         return Response(serializer.data)
 
