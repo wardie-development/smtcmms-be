@@ -1,3 +1,4 @@
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -87,6 +88,16 @@ class ReportViewSet(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = ListReportSerializer(instance)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["GET"])
+    def machine(self, request, *args, **kwargs):
+        machine_id = request.query_params.get("machine_id", None)
+        if not machine_id:
+            raise ValidationError({"error": "Machine ID is required"})
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.filter(machine_id=machine_id)
+        serializer = ListReportSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def get_queryset(self):
