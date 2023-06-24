@@ -74,7 +74,7 @@ class MachineTypeViewSet(GenericViewSet, mixins.ListModelMixin, mixins.CreateMod
 
 
 class ReportViewSet(ModelViewSet):
-    queryset = Report.objects.filter(is_active=True).order_by("-created_at", "is_verified")
+    queryset = Report.objects.filter(is_active=True).order_by("-created_at", "-is_verified")
     permission_classes = [IsAuthenticated]
     authentication_classes = [BearerTokenAuthentication]
     serializer_class = ReportSerializer

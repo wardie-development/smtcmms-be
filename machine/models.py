@@ -47,6 +47,9 @@ class Report(BaseModel):
     report_type = models.CharField(max_length=255, choices=REPORT_TYPE_CHOICES)
     notes = models.TextField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    symptoms = models.TextField(blank=True, null=True)
+    service_description = models.TextField(blank=True, null=True)
+    po = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.report_type
