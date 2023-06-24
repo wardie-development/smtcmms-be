@@ -41,6 +41,8 @@ class ReportSerializer(serializers.ModelSerializer):
 
 
 class ListReportSerializer(serializers.ModelSerializer):
+    machine = MachineSerializer()
+
     class Meta:
         model = Report
         fields = "__all__"
