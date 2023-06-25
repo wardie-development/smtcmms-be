@@ -34,7 +34,7 @@ class Machine(BaseModel):
     )
 
     additional_information = models.TextField(blank=True, null=True)
-    attachment = models.FileField(upload_to="reports", blank=True, null=True)
+    attachment = models.FileField(upload_to="machines", blank=True, null=True)
 
     def __str__(self):
         return self.model
