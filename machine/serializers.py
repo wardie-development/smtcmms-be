@@ -20,10 +20,14 @@ class MachineSerializer(serializers.ModelSerializer):
     manufacturer = ManufacturerSerializer()
     machine_type = MachineTypeSerializer()
     customer = CustomerSerializer()
+    attachment_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Machine
         fields = "__all__"
+
+    def get_attachment_type(self, obj):
+        return obj.attachment_type
 
 
 class CreateMachineSerializer(serializers.ModelSerializer):
@@ -41,8 +45,12 @@ class ReportSerializer(serializers.ModelSerializer):
 
 class ListReportSerializer(serializers.ModelSerializer):
     machine = MachineSerializer()
+    attachment_type = serializers.SerializerMethodField()
 
     class Meta:
         model = Report
         fields = "__all__"
         depth = 1
+
+    def get_attachment_type(self, obj):
+        return obj.attachment_type

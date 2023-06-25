@@ -4,6 +4,57 @@ from customer.models import Customer
 from utils.base.model import BaseModel
 
 
+class GetAttachmentTypeMixin:
+    VIDEO_EXTENSIONS = [
+        "mp4",
+        "webm",
+        "ogg",
+        "ogv",
+        "avi",
+        "mov",
+        "wmv",
+        "flv",
+        "mkv",
+    ]
+
+    IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "bmp", "svg", "webp"]
+
+    AUDIO_EXTENSIONS = [
+        "mp3",
+        "wav",
+        "ogg",
+        "oga",
+        "flac",
+        "aac",
+        "m4a",
+        "wma",
+        "alac",
+        "aiff",
+        "pcm",
+        "dsd",
+    ]
+
+    @property
+    def attachment_type(self):
+        attachment = self.attachment
+
+        if attachment.name == "":
+            return
+
+        extension = attachment.name.split(".")[-1].lower()
+
+        if extension in self.VIDEO_EXTENSIONS:
+            return "video"
+
+        if extension in self.IMAGE_EXTENSIONS:
+            return "image"
+
+        if extension in self.AUDIO_EXTENSIONS:
+            return "audio"
+
+        return "file"
+
+
 class Manufacturer(BaseModel):
     name = models.CharField(max_length=255, unique=True)
 
@@ -18,7 +69,7 @@ class MachineType(BaseModel):
         return self.name
 
 
-class Machine(BaseModel):
+class Machine(GetAttachmentTypeMixin, BaseModel):
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
     machine_type = models.ForeignKey(MachineType, on_delete=models.CASCADE)
     model = models.CharField(max_length=255)
@@ -40,7 +91,7 @@ class Machine(BaseModel):
         return self.model
 
 
-class Report(BaseModel):
+class Report(GetAttachmentTypeMixin, BaseModel):
     REPORT_TYPE_CHOICES = (
         ("Preventive Maintenance", "Preventive Maintenance"),
         ("Corrective Maintenance", "Corrective Maintenance"),
