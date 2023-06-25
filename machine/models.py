@@ -34,6 +34,7 @@ class Machine(BaseModel):
     )
 
     additional_information = models.TextField(blank=True, null=True)
+    attachment = models.FileField(upload_to="reports", blank=True, null=True)
 
     def __str__(self):
         return self.model
@@ -54,6 +55,7 @@ class Report(BaseModel):
     symptoms = models.TextField(blank=True, null=True)
     service_description = models.TextField(blank=True, null=True)
     po = models.CharField(max_length=255, blank=True, null=True)
+    attachment = models.FileField(upload_to="reports", blank=True, null=True)
 
     def __str__(self):
         return self.report_type

@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from rest_framework.generics import get_object_or_404
 
-from customer.models import Customer
 from customer.serializers import CustomerSerializer
 from .models import Machine, Manufacturer, MachineType, Report
 
