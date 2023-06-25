@@ -39,4 +39,5 @@ class UserAdmin(admin.ModelAdmin):
             obj.password = make_password(obj.password)
         obj.save()
 
+
 admin.site.unregister(Group)

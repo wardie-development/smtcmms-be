@@ -1,4 +1,5 @@
 from pathlib import Path
+from decouple import config as env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -61,8 +62,12 @@ WSGI_APPLICATION = "core_api.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
     }
 }
 
@@ -89,4 +94,25 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+if env("ENVIRONMENT", None) == "prd":
+    DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+    AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+
+    PROD_APPS = ["django_s3_storage"]
+
+    INSTALLED_APPS += PROD_APPS
+
+    WHITENOISE_STATIC_PREFIX = "/static/"
+
+    S3_BUCKET = "smtcmms-static"
+    AWS_STORAGE_BUCKET_NAME = S3_BUCKET
+
+    STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_S3_BUCKET_NAME_STATIC = S3_BUCKET
+
+    AWS_S3_CUSTOM_DOMAIN = f"{S3_BUCKET}.s3.amazonaws.com"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+    MEDIA_URL = AWS_S3_CUSTOM_DOMAIN

@@ -7,9 +7,14 @@ from rest_framework import mixins, status
 
 from utils.auth import BearerTokenAuthentication
 from .models import Machine, Manufacturer, MachineType, Report
-from .serializers import MachineSerializer, ManufacturerSerializer, \
-    MachineTypeSerializer, CreateMachineSerializer, ReportSerializer, \
-    ListReportSerializer
+from .serializers import (
+    MachineSerializer,
+    ManufacturerSerializer,
+    MachineTypeSerializer,
+    CreateMachineSerializer,
+    ReportSerializer,
+    ListReportSerializer,
+)
 
 
 class MachineViewSet(ModelViewSet):
@@ -31,8 +36,11 @@ class MachineViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         machine = serializer.save()
         headers = self.get_success_headers(serializer.data)
-        return Response(self.serializer_class(machine).data, status=status.HTTP_201_CREATED,
-                        headers=headers)
+        return Response(
+            self.serializer_class(machine).data,
+            status=status.HTTP_201_CREATED,
+            headers=headers,
+        )
 
     def update(self, request, *args, **kwargs):
         data = request.data
@@ -42,8 +50,7 @@ class MachineViewSet(ModelViewSet):
             data["customer"] = user.customer.id
 
         instance = self.get_object()
-        serializer = CreateMachineSerializer(instance, data=request.data,
-                                         partial=True)
+        serializer = CreateMachineSerializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         machine = serializer.save()
 
@@ -60,14 +67,18 @@ class MachineViewSet(ModelViewSet):
         return queryset.filter(customer=user.customer)
 
 
-class ManufacturerViewSet(GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+class ManufacturerViewSet(
+    GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
+):
     queryset = Manufacturer.objects.filter(is_active=True).order_by("-created_at")
     permission_classes = [IsAuthenticated]
     authentication_classes = [BearerTokenAuthentication]
     serializer_class = ManufacturerSerializer
 
 
-class MachineTypeViewSet(GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+class MachineTypeViewSet(
+    GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin
+):
     queryset = MachineType.objects.filter(is_active=True).order_by("-created_at")
     permission_classes = [IsAuthenticated]
     authentication_classes = [BearerTokenAuthentication]
@@ -75,7 +86,9 @@ class MachineTypeViewSet(GenericViewSet, mixins.ListModelMixin, mixins.CreateMod
 
 
 class ReportViewSet(ModelViewSet):
-    queryset = Report.objects.filter(is_active=True).order_by("-created_at", "-is_verified")
+    queryset = Report.objects.filter(is_active=True).order_by(
+        "-created_at", "-is_verified"
+    )
     permission_classes = [IsAuthenticated]
     authentication_classes = [BearerTokenAuthentication]
     serializer_class = ReportSerializer

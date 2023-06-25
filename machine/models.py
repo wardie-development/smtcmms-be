@@ -29,7 +29,9 @@ class Machine(BaseModel):
     hours = models.CharField(max_length=255, null=True, blank=True)
     servo = models.CharField(max_length=255, null=True, blank=True)
     firmware = models.CharField(max_length=255, null=True, blank=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     additional_information = models.TextField(blank=True, null=True)
 
@@ -43,7 +45,9 @@ class Report(BaseModel):
         ("Corrective Maintenance", "Corrective Maintenance"),
         ("Commissioning", "Commissioning"),
     )
-    machine = models.ForeignKey(Machine, on_delete=models.CASCADE, related_name="reports")
+    machine = models.ForeignKey(
+        Machine, on_delete=models.CASCADE, related_name="reports"
+    )
     report_type = models.CharField(max_length=255, choices=REPORT_TYPE_CHOICES)
     notes = models.TextField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)

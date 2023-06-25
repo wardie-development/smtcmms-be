@@ -5,41 +5,65 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('machine', '0002_alter_machinetype_name_alter_manufacturer_name'),
+        ("machine", "0002_alter_machinetype_name_alter_manufacturer_name"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='machine',
-            name='firmware',
+            model_name="machine",
+            name="firmware",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='machine',
-            name='hours',
+            model_name="machine",
+            name="hours",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='machine',
-            name='servo',
+            model_name="machine",
+            name="servo",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.CreateModel(
-            name='Report',
+            name="Report",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('report_type', models.CharField(choices=[('Preventive Maintenance', 'Preventive Maintenance'), ('Corrective Maintenance', 'Corrective Maintenance'), ('Commissioning', 'Commissioning')], max_length=255)),
-                ('notes', models.TextField(blank=True, null=True)),
-                ('is_verified', models.BooleanField(default=False)),
-                ('machine', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reports', to='machine.machine')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("is_active", models.BooleanField(default=True)),
+                (
+                    "report_type",
+                    models.CharField(
+                        choices=[
+                            ("Preventive Maintenance", "Preventive Maintenance"),
+                            ("Corrective Maintenance", "Corrective Maintenance"),
+                            ("Commissioning", "Commissioning"),
+                        ],
+                        max_length=255,
+                    ),
+                ),
+                ("notes", models.TextField(blank=True, null=True)),
+                ("is_verified", models.BooleanField(default=False)),
+                (
+                    "machine",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="reports",
+                        to="machine.machine",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
     ]

@@ -1,7 +1,11 @@
 from utils import router
 
-from .views import MachineViewSet, ManufacturerViewSet, MachineTypeViewSet, \
-    ReportViewSet
+from .views import (
+    MachineViewSet,
+    ManufacturerViewSet,
+    MachineTypeViewSet,
+    ReportViewSet,
+)
 
 app_name = "apps.machine"
 

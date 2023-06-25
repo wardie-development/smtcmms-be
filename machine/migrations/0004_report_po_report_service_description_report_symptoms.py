@@ -4,25 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('machine', '0003_alter_machine_firmware_alter_machine_hours_and_more'),
+        ("machine", "0003_alter_machine_firmware_alter_machine_hours_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='report',
-            name='po',
+            model_name="report",
+            name="po",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='report',
-            name='service_description',
+            model_name="report",
+            name="service_description",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='report',
-            name='symptoms',
+            model_name="report",
+            name="symptoms",
             field=models.TextField(blank=True, null=True),
         ),
     ]

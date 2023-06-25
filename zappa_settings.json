@@ -1,0 +1,17 @@
+{
+    "prd": {
+        "aws_region": "us-east-2",
+        "django_settings": "core_api.settings",
+        "profile_name": "default",
+        "project_name": "smtcmms-api",
+        "runtime": "python3.10",
+        "s3_bucket": "zappa-qozx1amqo",
+        "memory_size": 512,
+        "timeout_seconds": 600,
+        "slim_handler": true,
+        "cors_enabled": true,
+        "cors_origin": "*",
+        "cors_headers": "*",
+        "cors_methods": ["GET", "POST", "PUT", "DELETE"]
+    }
+}
