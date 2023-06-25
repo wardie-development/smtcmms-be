@@ -41,6 +41,7 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = "__all__"
+        extra_kwargs = {"is_active": {"read_only": True}}
 
 
 class ListReportSerializer(serializers.ModelSerializer):
