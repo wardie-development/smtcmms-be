@@ -38,7 +38,7 @@ class GetAttachmentTypeMixin:
     def attachment_type(self):
         attachment = self.attachment
 
-        if attachment.name == "":
+        if attachment is None or attachment.name in ["", None]:
             return
 
         extension = attachment.name.split(".")[-1].lower()
