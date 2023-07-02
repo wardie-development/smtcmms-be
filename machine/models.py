@@ -98,7 +98,7 @@ class Machine(GetAttachmentTypeMixin, BaseModel):
         days_active = timedelta(days=self.life_time / self.hour_active)
         last_report = self.reports.last()
         last_maintenance_datetime = self.created_at
-        if last_report:
+        if last_report and last_report.report_type == "Preventive Maintenance":
             last_maintenance_datetime = last_report.created_at
 
         next_maintenance_datetime = last_maintenance_datetime + days_active
