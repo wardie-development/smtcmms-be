@@ -1,4 +1,8 @@
+from datetime import timedelta
+
 from django.db import models
+from django.db.models import Sum
+from django.utils import timezone
 
 from customer.models import Customer
 from utils.base.model import BaseModel
@@ -74,6 +78,8 @@ class Machine(GetAttachmentTypeMixin, BaseModel):
     machine_type = models.ForeignKey(MachineType, on_delete=models.CASCADE)
     model = models.CharField(max_length=255)
     serial_number = models.CharField(max_length=255)
+    hour_active = models.IntegerField(default=10)
+    life_time = models.IntegerField(default=10)
     vintage = models.CharField(max_length=255, null=True, blank=True)
     software_version = models.CharField(max_length=255, null=True, blank=True)
     voltage = models.CharField(max_length=255, null=True, blank=True)
@@ -86,6 +92,19 @@ class Machine(GetAttachmentTypeMixin, BaseModel):
 
     additional_information = models.TextField(blank=True, null=True)
     attachment = models.FileField(upload_to="machines", blank=True, null=True)
+
+    @property
+    def need_maintenance(self):
+        days_active = timedelta(days=self.life_time / self.hour_active)
+        last_report = self.reports.last()
+        last_maintenance_datetime = self.created_at
+        if last_report:
+            last_maintenance_datetime = last_report.created_at
+
+        next_maintenance_datetime = last_maintenance_datetime + days_active
+        days_until_next_maintenance = next_maintenance_datetime - timezone.now()
+
+        return next_maintenance_datetime < timezone.now(), next_maintenance_datetime, days_until_next_maintenance
 
     def __str__(self):
         return self.model

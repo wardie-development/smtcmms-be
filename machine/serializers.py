@@ -21,6 +21,7 @@ class MachineSerializer(serializers.ModelSerializer):
     machine_type = MachineTypeSerializer()
     customer = CustomerSerializer()
     attachment_type = serializers.SerializerMethodField()
+    maintenance = serializers.SerializerMethodField()
 
     class Meta:
         model = Machine
@@ -28,6 +29,16 @@ class MachineSerializer(serializers.ModelSerializer):
 
     def get_attachment_type(self, obj):
         return obj.attachment_type
+
+    def get_maintenance(self, obj):
+        need_maintenance, next_maintenance_datetime, days_until_next_maintenance = obj.need_maintenance
+        next_maintenance_datetime_json = next_maintenance_datetime.strftime("%Y-%m-%dT%H:%M:%S")
+
+        return {
+            "need_maintenance": need_maintenance,
+            "next_maintenance_datetime": next_maintenance_datetime_json,
+            "days_until_next_maintenance": days_until_next_maintenance.days
+        }
 
 
 class CreateMachineSerializer(serializers.ModelSerializer):

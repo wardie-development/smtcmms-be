@@ -23,6 +23,25 @@ class MachineViewSet(ModelViewSet):
     authentication_classes = [BearerTokenAuthentication]
     serializer_class = MachineSerializer
 
+    def list(self, request, *args, **kwargs):
+        need_maintenance = request.query_params.get("need_maintenance", None)
+
+        if need_maintenance is not None:
+            queryset = self.get_queryset()
+            filtered_queryset = []
+
+            for machine in queryset:
+                need_maintenance, _, _ = machine.need_maintenance
+
+                if need_maintenance:
+                    filtered_queryset.append(machine)
+
+            serializer = self.get_serializer(filtered_queryset, many=True)
+
+            return Response(serializer.data)
+
+        return super().list(request, *args, **kwargs)
+
     def create(self, request, *args, **kwargs):
         data = request.data
         user = request.user
