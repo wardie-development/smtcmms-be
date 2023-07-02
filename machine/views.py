@@ -31,9 +31,9 @@ class MachineViewSet(ModelViewSet):
             filtered_queryset = []
 
             for machine in queryset:
-                need_maintenance, _, _ = machine.need_maintenance
+                need_maintenance, _, days_until_next_maintenance = machine.need_maintenance
 
-                if need_maintenance:
+                if need_maintenance or days_until_next_maintenance.days <= 5:
                     filtered_queryset.append(machine)
 
             serializer = self.get_serializer(filtered_queryset, many=True)
