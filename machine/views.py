@@ -46,7 +46,7 @@ class MachineViewSet(ModelViewSet):
         data = request.data
         user = request.user
 
-        if user.is_superuser and "customer" not in data:
+        if user.is_superuser and not data.get("customer"):
             raise ValidationError({"error": "Customer is required"})
         elif not user.is_superuser:
             data["customer"] = user.customer.id
