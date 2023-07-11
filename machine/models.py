@@ -125,6 +125,8 @@ class Report(GetAttachmentTypeMixin, BaseModel):
     symptoms = models.TextField(blank=True, null=True)
     service_description = models.TextField(blank=True, null=True)
     po = models.CharField(max_length=255, blank=True, null=True)
+    other_parts_replaced = models.TextField(blank=True, null=True)
+    parts_to_be_replaced_at_the_next_visit = models.TextField(blank=True, null=True)
     attachment = models.FileField(upload_to="reports", blank=True, null=True)
 
     def __str__(self):
