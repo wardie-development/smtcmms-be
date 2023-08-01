@@ -12,9 +12,9 @@ class State(BaseModel):
 
 class Customer(BaseModel):
     name = models.CharField(max_length=255)
-    contact_name = models.CharField(max_length=255)
+    contact_name = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255)
     state = models.ForeignKey(State, on_delete=models.CASCADE, null=True, blank=True)
     postal_code = models.CharField(max_length=255, null=True, blank=True)
