@@ -95,6 +95,9 @@ class Machine(GetAttachmentTypeMixin, BaseModel):
 
     @property
     def need_maintenance(self):
+        if self.life_time == 0 or self.hour_active == 0:
+            return False, None, None
+
         days_active = timedelta(days=self.life_time / self.hour_active)
         last_report = self.reports.last()
         last_maintenance_datetime = self.created_at
