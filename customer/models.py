@@ -16,8 +16,8 @@ class Customer(BaseModel):
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
-    state = models.ForeignKey(State, on_delete=models.CASCADE)
-    postal_code = models.CharField(max_length=255)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, null=True, blank=True)
+    postal_code = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name
