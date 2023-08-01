@@ -32,12 +32,18 @@ class MachineSerializer(serializers.ModelSerializer):
 
     def get_maintenance(self, obj):
         need_maintenance, next_maintenance_datetime, days_until_next_maintenance = obj.need_maintenance
-        next_maintenance_datetime_json = next_maintenance_datetime.strftime("%Y-%m-%dT%H:%M:%S")
+        next_maintenance_datetime_json = None
+        if next_maintenance_datetime:
+            next_maintenance_datetime_json = (
+                next_maintenance_datetime.strftime("%Y-%m-%dT%H:%M:%S")
+            )
+        if days_until_next_maintenance:
+            days_until_next_maintenance = days_until_next_maintenance.days
 
         return {
             "need_maintenance": need_maintenance,
             "next_maintenance_datetime": next_maintenance_datetime_json,
-            "days_until_next_maintenance": days_until_next_maintenance.days
+            "days_until_next_maintenance": days_until_next_maintenance
         }
 
 
